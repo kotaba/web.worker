@@ -1,6 +1,6 @@
 # *-* coding: utf-8 *-*
 
-import ffmpeg
+import subprocess
 import urllib
 import json
 import platform
@@ -8,7 +8,7 @@ import os
 import requests
 
 
-HOST = platform.node()
+HOST = 'ip-172-31-10-121'
 TASK_GET_URL = 'http://ecsv.org.ua:8001/task/get?hostname=' + HOST
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 TASK_WEBHOOK_FINISH = 'http://converter.ecsv.org.ua/webhook/video/accept'
@@ -27,21 +27,8 @@ with open(path, 'wb') as output:
 output_file_name = str(task_id) + '.mp4'
 output_base_path = BASE_PATH + '/videos/converted_'
 output_file_path =  output_base_path + output_file_name
-stream = ffmpeg.input(path)
-stream = ffmpeg.output(stream, output_file_path)
-ffmpeg.run(stream)
 
-'''parts = [1,2,3,4,5]
-
-START_FRAME = 0
-END_FRAME = 60
-for partial in parts:
-    part = ffmpeg.input(output_file_path)
-    part.trim(start_frame=START_FRAME, end_frame=END_FRAME)
-    part = ffmpeg.output(part, output_base_path + 'split_part_' + str(partial) + '_' + output_file_name)
-    ffmpeg.run(part)
-    START_FRAME = START_FRAME + 60
-    END_FRAME = END_FRAME + 60'''
+subprocess.call(["ffmpeg -i %s -c:v libx264 -crf 19 -preset:v superfast -c:a aac -b:a 128k -ac 2 -threads 0 -r 10 -strict -2 %s" % (path, output_file_path)])
 
 response = requests.post(TASK_WEBHOOK_FINISH,
                          files={
@@ -52,12 +39,10 @@ response = requests.post(TASK_WEBHOOK_FINISH,
                          data={'queue_id': queue_id}
                          )
 json_response = response.text
-print json_response
 
 response = requests.post(TASK_MANAGER_FINISH,
                          data={'hostname': HOST}
                          )
-print response.text()
 
 
 
