@@ -8,7 +8,7 @@ import os
 import requests
 
 
-HOST = 'ip-172-31-10-121'
+HOST = platform.node()
 TASK_GET_URL = 'http://ecsv.org.ua:8001/task/get?hostname=' + HOST
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 TASK_WEBHOOK_FINISH = 'http://converter.ecsv.org.ua/webhook/video/accept'
