@@ -12,11 +12,12 @@ import math
 target_files = {}
 part_files = {}
 HOST = platform.node()
-TASK_GET_URL = 'http://ecsv.org.ua:8001/task/get?hostname=' + HOST
+TASK_GET_URL = 'http://vm.cifr.us/task/get?hostname=' + HOST
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
-TASK_WEBHOOK_FINISH_VIDEO = 'http://converter.ecsv.org.ua/webhook/video/accept'
-TASK_WEBHOOK_FINISH_PART = 'http://converter.ecsv.org.ua/webhook/part/accept'
-TASK_MANAGER_FINISH = 'http://ecsv.org.ua:8001/webhook/vm/shutdown'
+TASK_WEBHOOK_FINISH_VIDEO = 'http://vision.cifr.us/webhook/video/accept'
+TASK_WEBHOOK_FINISH_PART = 'http://vision.cifr.us/webhook/part/accept'
+TASK_MANAGER_FINISH = 'http://vm.cifr.us/webhook/vm/shutdown'
+TASK_WEBHOOK_THUMB_VIDEO = 'http://vm.cifr.us/webhook/task/set/thumbnail'
 length_regexp = 'Duration: (\d{2}):(\d{2}):(\d{2})\.\d+,'
 re_length = re.compile(length_regexp)
 
@@ -34,13 +35,20 @@ output_file_name = str(task_id) + '.mp4'
 output_base_path = BASE_PATH + '/videos/converted_'
 output_file_path = output_base_path + output_file_name
 
+output_thumb_base_path = BASE_PATH + '/videos/thumb.png'
+thumbCommand = "ffmpeg -i %s -r 1  -t 00:00:10 -f image2 %s" % (path, output_thumb_base_path)
+output = subprocess.Popen(thumbCommand);
+thumbVideoData = requests.post(TASK_WEBHOOK_THUMB_VIDEO + '/' + queue_id,
+                         files=open(output_thumb_base_path),
+                         )
+
 command = "ffmpeg -i %s -c:v libx264 -crf 19 -preset:v superfast -c:a aac -b:a 128k -ac 2 -r 10 -strict -2 %s" % (
 path, output_file_path)
 os.system(command)
 
 target_files['full'] = open(output_file_path)
 
-split_length = 10
+split_length = 3600
 output = subprocess.Popen("ffmpeg -i '" + output_file_path + "' 2>&1 | grep 'Duration'",
                           shell=True,
                           stdout=subprocess.PIPE
