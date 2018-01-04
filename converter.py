@@ -17,7 +17,7 @@ BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 TASK_WEBHOOK_FINISH_VIDEO = 'http://vision.cifr.us/webhook/video/accept'
 TASK_WEBHOOK_FINISH_PART = 'http://vision.cifr.us/webhook/part/accept'
 TASK_MANAGER_FINISH = 'http://vm.cifr.us/webhook/vm/shutdown'
-TASK_WEBHOOK_THUMB_VIDEO = 'http://vm.cifr.us/webhook/task/set/thumbnail'
+TASK_WEBHOOK_THUMB_VIDEO = 'http://vision.cifr.us/webhook/task/set/thumbnail'
 length_regexp = 'Duration: (\d{2}):(\d{2}):(\d{2})\.\d+,'
 re_length = re.compile(length_regexp)
 
@@ -37,7 +37,7 @@ output_file_path = output_base_path + output_file_name
 
 output_thumb_base_path = BASE_PATH + '/videos/thumb.png'
 thumbCommand = "ffmpeg -i %s -r 1  -t 00:00:10 -f image2 %s" % (path, output_thumb_base_path)
-output = subprocess.Popen(thumbCommand);
+output = subprocess.Popen(thumbCommand, shell=True, stdout=subprocess.PIPE).stdout.read()
 thumbVideoData = requests.post(TASK_WEBHOOK_THUMB_VIDEO + '/' + queue_id,
                          files=open(output_thumb_base_path),
                          )
