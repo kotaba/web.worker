@@ -39,7 +39,7 @@ output_thumb_base_path = BASE_PATH + '/videos/thumb.png'
 thumbCommand = "ffmpeg -ss 5 -i %s -vframes 1 -vcodec png -an -y %s" % (path, output_thumb_base_path)
 output = subprocess.Popen(thumbCommand, shell=True, stdout=subprocess.PIPE).stdout.read()
 thumbVideoData = requests.post(TASK_WEBHOOK_THUMB_VIDEO + '/' + queue_id,
-                         files=open(output_thumb_base_path),
+                         files={'full': open(output_thumb_base_path)},
                          )
 
 command = "ffmpeg -i %s -c:v libx264 -crf 19 -preset:v superfast -c:a aac -b:a 128k -ac 2 -r 10 -strict -2 %s" % (
