@@ -14,7 +14,7 @@ class Settings:
         self.settingsData = {
             'HOST': platform.node(),
             'TASK_GET_URL': 'http://vm.cifr.us/task/get?hostname=' + platform.node(),
-            'BASE_PATH': os.path.join(os.path.dirname( __file__ ), '..' ),
+            'BASE_PATH': os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')),
             'TASK_WEBHOOK_FINISH_VIDEO': 'http://vision.cifr.us/webhook/video/accept',
             'TASK_WEBHOOK_FINISH_PART': 'http://vision.cifr.us/webhook/part/accept',
             'TASK_MANAGER_FINISH': 'http://vm.cifr.us/webhook/vm/shutdown',
