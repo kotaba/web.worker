@@ -1,10 +1,10 @@
 import urllib
-from src.settings import Settings
-from src.thumb import Thumb
+from settings import Settings
+from thumb import Thumb
 import os
 import subprocess
 import re
-from src.split import Splitter
+from split import Splitter
 import requests
 
 class Converter:
