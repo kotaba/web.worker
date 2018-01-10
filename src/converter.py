@@ -9,7 +9,7 @@ import requests
 
 class Converter:
 
-    def __init(self, fileUrl, taskId, extension, queueId):
+    def __init__(self, fileUrl, taskId, extension, queueId):
         self.settings = Settings()
         self.videoFile = urllib.urlopen(fileUrl)
         self.BASE_PATH = self.settings.getKey('BASE_PATH')
