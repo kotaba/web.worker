@@ -33,6 +33,8 @@ class Converter:
 
         if self.extension == '.mp4' or self.extension == '.avi':
             self.convertStandartModule()
+        elif self.extension == '.mov':
+            self.convertMovModule()
 
         self.splitter = Splitter(matches=self.getDuration(), split_length=self.splitSeconds, output_file_path=self.getOutputPath().get('output_file_path'))
         self.partFiles = self.splitter.getPartFiles()
@@ -78,6 +80,11 @@ class Converter:
     # if convert mp4 or avi
     def convertStandartModule(self):
         command = "ffmpeg -i %s -c:v libx264 -crf 19 -preset:v superfast -c:a aac -b:a 128k -ac 2 -r 10 -strict -2 %s" % (self.getSavePath(), self.getOutputPath().get('output_file_path'))
+        os.system(command)
+        self.targetFiles['full'] = open(self.getOutputPath().get('output_file_path'))
+
+    def convertMovModule(self):
+        command = "ffmpeg -i %s -c copy -preset:v superfast -b:a 128k -strict -2 %s" % (self.getSavePath(), self.getOutputPath().get('output_file_path'))
         os.system(command)
         self.targetFiles['full'] = open(self.getOutputPath().get('output_file_path'))
 
