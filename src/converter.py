@@ -26,7 +26,7 @@ class Converter:
         self.partFiles = {}
 
         self.thumb = Thumb(
-            videoPath=self.getOutputPath().get('output_file_path'),
+            videoPath=self.getSavePath(),
             thumbOutput=self.getOutputPath().get('output_thumb_path'),
             queueId=self.queueId
         )
