@@ -28,7 +28,8 @@ class Converter:
         self.thumb = Thumb(
             videoPath=self.getSavePath(),
             thumbOutput=self.getOutputPath().get('output_thumb_path'),
-            queueId=self.queueId
+            queueId=self.queueId,
+            extension = self.extension
         )
 
         if self.extension == '.mp4' or self.extension == '.avi':
