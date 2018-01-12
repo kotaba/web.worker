@@ -92,7 +92,7 @@ class Converter:
         self.targetFiles['full'] = open(self.getOutputPath().get('output_file_path'))
 
     def convertDavModule(self):
-        command = "ffmpeg -i %s -vcodec libx264 %s" % (self.getSavePath(), self.getOutputPath().get('output_file_path'))
+        command = "ffmpeg -i %s -preset:v ultrafast -vcodec libx264 %s" % (self.getSavePath(), self.getOutputPath().get('output_file_path'))
         os.system(command)
         self.targetFiles['full'] = open(self.getOutputPath().get('output_file_path'))
 
